@@ -194,4 +194,8 @@ FROM
     INNER JOIN t_student s ON ams.idStudent = s.idStudent
 ORDER BY 
     s.stuName, s.stuFirstName, ams.staYear DESC, ams.staMonth DESC;
+	
+-- test1 : 
+INSERT INTO `t_absence` (`idAbsence`, `idStudent`, `absDate`, `absPeriodStart`, `absPeriodEnd`, `idReason`) 
+VALUES (NULL, '1', '2023-09-06', '1', '4', '1') 
 

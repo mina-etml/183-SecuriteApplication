@@ -1,6 +1,5 @@
 -- ============================================================================
--- Script d'échauffement : Logging des opérations sur t_absence
--- Exercice simple pour comprendre les triggers
+-- Exercice simple pour pratiquer les triggers
 -- ============================================================================
 
 -- --------------------------------------------------------
@@ -11,17 +10,11 @@ CREATE TABLE `t_log` (
   `idLog` int NOT NULL,
   `logDate` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `logComment` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+);
 
---
--- Index pour la table `t_log`
---
 ALTER TABLE `t_log`
   ADD PRIMARY KEY (`idLog`);
 
---
--- AUTO_INCREMENT pour la table `t_log`
---
 ALTER TABLE `t_log`
   MODIFY `idLog` int NOT NULL AUTO_INCREMENT;
 
@@ -83,53 +76,20 @@ END$$
 
 DELIMITER ;
 
--- ============================================================================
--- Instructions d'utilisation
--- ============================================================================
 
-/*
-UTILISATION SIMPLE :
+-- Test INSERT
+INSERT INTO t_absence (idStudent, absDate, absPeriodStart, absPeriodEnd, idReason)
+VALUES (1, '2024-12-05', 1, 1, 1);
 
-1. Exécuter ce script dans votre base de données
+-- Test UPDATE
+UPDATE t_absence 
+SET absPeriodEnd = 2 
+WHERE idAbsence = 1;
 
-2. Tester avec des opérations sur t_absence :
+-- Test DELETE
+DELETE FROM t_absence 
+WHERE idAbsence = 1;
 
-   -- Test INSERT
-   INSERT INTO t_absence (idStudent, absDate, absPeriodStart, absPeriodEnd, idReason)
-   VALUES (1, '2024-12-05', 1, 1, 1);
-   
-   -- Test UPDATE
-   UPDATE t_absence 
-   SET absPeriodEnd = 2 
-   WHERE idAbsence = 1;
-   
-   -- Test DELETE
-   DELETE FROM t_absence 
-   WHERE idAbsence = 1;
+SELECT * FROM t_log ORDER BY logDate DESC;
 
-3. Consulter les logs :
-   SELECT * FROM t_log ORDER BY logDate DESC;
 
-EXEMPLE DE RÉSULTAT :
-
-+-------+---------------------+---------------------------------------------------+
-| idLog | logDate             | logComment                                        |
-+-------+---------------------+---------------------------------------------------+
-|     3 | 2024-12-03 15:30:45 | DELETE : Absence #1 supprimée pour étudiant 1... |
-|     2 | 2024-12-03 15:30:30 | UPDATE : Absence #1 modifiée pour étudiant 1     |
-|     1 | 2024-12-03 15:30:15 | INSERT : Absence ajoutée pour étudiant 1 le ...  |
-+-------+---------------------+---------------------------------------------------+
-
-POUR NETTOYER LES LOGS :
-   TRUNCATE TABLE t_log;
-
-AVANTAGES PÉDAGOGIQUES :
-✅ Très simple à comprendre
-✅ On voit en temps réel ce qui se passe
-✅ Utile pour déboguer
-✅ Bon exercice d'échauffement avant les triggers complexes
-
-AMÉLIORATION POSSIBLE :
-Vous pourriez ajouter une colonne pour stocker le type d'opération :
-   `logOperation` ENUM('INSERT', 'UPDATE', 'DELETE')
-*/

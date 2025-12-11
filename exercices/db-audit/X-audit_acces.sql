@@ -252,7 +252,7 @@ teacher :
 */
 /*
 
-QUESTIONS intéressantes :
+QUESTIONS subsidiaires [TODO/jmy ajouter dans word ] :
 
 1. Pourquoi les accès directs de teacher à la vue ne sont-ils pas audités ?
    Réponse : Car il accède directement à la vue, pas via la procédure
