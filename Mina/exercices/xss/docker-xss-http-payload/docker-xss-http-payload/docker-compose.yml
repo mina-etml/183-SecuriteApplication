@@ -1,0 +1,34 @@
+# Creation date : 18.03.2024
+# Created by : CSR
+# Description : This compose file creates a stack of two containers (nodejs + mysql)
+# 
+version: '2'
+
+services:
+   
+            
+    nodejs:
+        build:
+            context: .
+            dockerfile: nodejs.dockerfile
+        user: "node"
+        working_dir: /home/node/app
+        environment:
+            #- NODE_ENV=production
+            - NODE_ENV=development
+        volumes:   
+            - ./app:/home/node/app
+            - /home/node/app/node_modules
+        expose:
+            - "8087"
+        ports: 
+            - "8087:8087"
+        command: "npm start"
+        #command: "npm run dev"
+
+# The database will be persistent among containers restarts.
+volumes:
+    dbdata:
+
+
+  

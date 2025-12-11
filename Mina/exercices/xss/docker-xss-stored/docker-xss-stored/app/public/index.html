@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Livre d'or</title>
+  <style>
+    /* Styles CSS pour la mise en page */
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+    }
+    h1 {
+      text-align: center;
+    }
+    form {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Livre d'or</h1>
+  <form id="commentForm">
+    <div>
+      <label for="comTitle">Titre du commentaire:</label><br>
+      <input type="text" id="comTitle" name="comTitle" required>
+    </div>
+    <div>
+      <label for="comText">Texte du commentaire:</label><br>
+      <textarea id="comText" name="comText" rows="4" required></textarea>
+    </div>
+    <button type="submit">Ajouter un commentaire</button>
+  </form>
+
+  <h2>Commentaires existants</h2>
+
+  <div id="comments"></div>
+
+  <script>
+
+    async function loadComments() {
+      try {
+        const response = await fetch('/comment');
+        if (!response.ok) {
+          throw new Error('Erreur lors du chargement des commentaires');
+        }
+        const comments = await response.json();
+        const commentsContainer = document.getElementById('comments');
+        commentsContainer.innerHTML = '';
+        comments.forEach(comment => {
+          commentsContainer.innerHTML += `<div>${comment.comText}</div>`;
+        });
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+
+    loadComments();
+
+
+    document.getElementById('commentForm').addEventListener('submit', async function(event) {
+      event.preventDefault(); 
+      const formData = new FormData(this);
+      const commentData = Object.fromEntries(formData.entries());
+
+      try {
+        const response = await fetch('/comment', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(commentData)
+        });
+        if (!response.ok) {
+          throw new Error('Erreur lors de l\'ajout du commentaire');
+        }
+        loadComments();
+        this.reset();
+      } catch (error) {
+        console.error(error);
+      }
+    });
+  </script>
+</body>
+</html>
